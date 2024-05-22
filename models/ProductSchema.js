@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema({
-    name: {
+    productName: {
         type: String
     },
     price : {
         type : String
     },
-    unitOfMeasure : {
+    unit : {
         type : String
     },
-    gstPercentage : {
+    gst : {
         type : Number
     },
     description : {
@@ -23,6 +23,6 @@ const ProductSchema = new mongoose.Schema({
     timestamps : true
 })
 
-const Product = mongoose.model('Admin', ProductSchema);
+const Product = mongoose.model('Product', ProductSchema);
 
 export default Product

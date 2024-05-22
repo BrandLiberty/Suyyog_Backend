@@ -132,3 +132,33 @@ export const getBusinessInfo = async (req, res) => {
         })
     }
 }
+
+export const addTermsCondition = async (req, res) => {
+    console.log("API : '/superadmin/add-business-terms")
+    try {
+        console.log("REQ BODY ", req.body);
+        let superadminData = await SuperAdmin.find({})
+        if (superadminData.length > 0) {
+            await SuperAdmin.findByIdAndUpdate(superadminData[0]._id, {
+                $push: {
+                    termsCondition: req.body
+                }
+            }, { new: true })
+            let superadmin = await SuperAdmin.find({})
+            res.status(200).json({
+                message: "SuperAdmin Terms Data Info Added Successfully",
+                data: superadmin
+            })
+            return
+        }
+       
+        res.status(200).json({
+            message: "SuperAdmin Not Created",
+        })
+    } catch (err) {
+        console.log("ERROR IN ADDING Super Admin Terms Info", err);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+}

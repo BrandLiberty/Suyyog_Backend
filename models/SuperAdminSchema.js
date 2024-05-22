@@ -6,55 +6,59 @@ const LOGO_PATH = './uploads/logo'
 const SIGN_PATH = './uploads/signatures'
 
 const superAdminSchema = new mongoose.Schema({
-    
+
     adminId: {
-        type : String
+        type: String
     },
-    password : {
-        type : String
+    password: {
+        type: String
     },
-    businessName : {
-        type : String
+    businessName: {
+        type: String
     },
-    companyName : {
-        type : String
+    companyName: {
+        type: String
     },
-    email : {
-        type : String
+    email: {
+        type: String
     },
-    phone : {
-        type : String
+    phone: {
+        type: String
     },
-    address : {
-        type : String
+    address: {
+        type: String
     },
-    GSTINNo : {
-        type : String
+    GSTINNo: {
+        type: String
     },
-    state : {
-        type : String
+    state: {
+        type: String
     },
-    businessCategory : {
-        type : String
+    businessCategory: {
+        type: String
     },
-    paymentInfo : {
-        type : String
+    paymentInfo: {
+        type: String
     },
-    logo : {
-        type : String
+    logo: {
+        type: String
     },
-    signature : {
-        type : String,
-        default : ''
+    signature: {
+        type: String,
+        default: ''
     },
-    termsCondition : [
+    termsCondition: [
         {
-            type : String,
-            enum : ['quotation','invoice','purchaseOrder']
+            selectedOption: {
+                type: String,
+            },
+            Note : {
+                type : String,
+            }
         }
     ]
 }, {
-    timestamps : true
+    timestamps: true
 })
 try {
     let logoStorage = multer.diskStorage({
@@ -85,6 +89,6 @@ try {
     console.log("MULTER SCHEMA ERROR", error);
 }
 
-const SuperAdmin = mongoose.model('SuperAdmin',superAdminSchema)
+const SuperAdmin = mongoose.model('SuperAdmin', superAdminSchema)
 
 export default SuperAdmin

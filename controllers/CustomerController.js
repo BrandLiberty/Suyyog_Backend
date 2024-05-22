@@ -43,14 +43,10 @@ export const deleteCustomerInfo = async (req, res) => {
         console.log("REQ BODY ", req.body);
         const { id } = req.body
         const customer = await Customer.findOne({ _id: id })
-        if (!customer) {
-            res.status(500).json({
-                message: "Customer Not Found",
-                data: customers
-            })
-            return
+        if (customer) {
+            await Customer.findByIdAndDelete(customer._id, req.body, { new: true })
         }
-        await Customer.findByIdAndDelete(customer._id, req.body, { new: true })
+       
         let customers = await Customer.find({})
         res.status(200).json({
             message: "Customer Deleted Successfully",
