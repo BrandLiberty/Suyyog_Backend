@@ -1,27 +1,6 @@
 import Customer from '../models/CustomerSchema.js'
 
-export const addBusinessInfo = async (req, res) => {
-    console.log("API : '/superadmin/add-customer")
-    try {
-        console.log("REQ BODY ", req.body);
-        const { name } = req.body
-        let customer = await Customer.findOne({ name: name })
-        if (!customer) {
-            customer = await Customer.create({ name: name })
-        }
-        await Customer.findByIdAndUpdate(customer._id, req.body, { new: true })
-        let customers = await Customer.find({})
-        res.status(200).json({
-            message: "Customer Added Successfully",
-            data: customers
-        })
-    } catch (err) {
-        console.log("ERROR IN ADDING CUSTOMER ", err);
-        res.status(500).json({
-            message: "Internal Server Error"
-        })
-    }
-}
+
 export const addCustomerInfo = async (req, res) => {
     console.log("API : '/superadmin/add-customer")
     try {
