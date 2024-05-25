@@ -39,3 +39,17 @@ export const addQuotation = async (req, res) => {
         })
     }
 }
+export const getQuotationInfo = async (req, res) => {
+    console.log("API : '/quotation/get-quotation")
+    try {
+        const quotation = await Quotation.find({});
+        res.status(200).json({
+            message: "Quotation Data Added",
+            data: quotation
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+}
