@@ -1,6 +1,5 @@
 import Customer from '../models/CustomerSchema.js'
 
-
 export const addCustomerInfo = async (req, res) => {
     console.log("API : '/superadmin/add-customer")
     try {

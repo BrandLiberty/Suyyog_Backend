@@ -1,46 +1,62 @@
 import mongoose from "mongoose";
+import Customer from './CustomerSchema.js'
+import Product from './ProductSchema.js'
+import Terms from './TermsConditionSchema.js'
 
 const QuotationSchema = new mongoose.Schema({
-    customerName: {
-        type: String
+    quotationDate: {
+        type: Date
     },
-    purchaseProduct: [
-        {
-            name: {
-                type: String
-            },
-            price: {
-                type: String
-            },
+    quotationNo: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    customer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Customer'
+    },
+    purchaseProduct: [{
+        productData: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        },
+        quantity: {
+            type: String
+        },
+        price: {
+            type: String
+        },
+        description: {
+            type: String
         }
-    ],
-    OtherCharges: {
-        amount: {
-            type: Number
+    }],
+    otherCharges: {
+        Other_Amount: {
+            type: String
         },
-        tax: {
-            type: Boolean
+        GST: {
+            type: String
         },
-        label: {
+        Other_Label: {
             type: String
         }
     },
     termsConditon: [
         {
-            type : {
-                type : String
-            },
-            value : {
-                type : String
-            }
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Terms'
         }
     ],
-    document : {
+    document: {
+        type: String
+    },
+    amountDue : {
         type : String
     }
 }, {
     timestamps: true
 })
-const Quotation = mongoose.model('Admin', QuotationSchema);
+const Quotation = mongoose.model('Quotation', QuotationSchema);
 
 export default Quotation
