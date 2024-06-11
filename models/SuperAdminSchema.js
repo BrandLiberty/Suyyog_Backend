@@ -6,12 +6,14 @@ const LOGO_PATH = './uploads/logo'
 const SIGN_PATH = './uploads/signatures'
 
 const superAdminSchema = new mongoose.Schema({
-
-    adminId: {
-        type: String
+    userName : {
+        type : String,
+        unique : true,
+        default : "suyog@Electronics.com"
     },
-    password: {
-        type: String
+    password : {
+        type : String,
+        default : "Suyog@1906"
     },
     businessName: {
         type: String
