@@ -33,7 +33,7 @@ export const addBusinessInfo = async (req, res) => {
     }
 }
 export const addBussinessLogo = async (req, res) => {
-    console.log("API : '/superadmin/add-business-logoasdf");
+    console.log("API : '/superadmin/add-business-logo");
     try {
         SuperAdmin.uploadLogo(req, res, async err => {
             if (err) {

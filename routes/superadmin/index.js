@@ -4,6 +4,7 @@ import { addBusinessInfo, addBussinessLogo, addBussinessSign, getBusinessInfo } 
 const router = express.Router()
 import product from '../product/index.js'
 import TermsCondition from "../termsCondition/index.js";
+import Settings from "../settings/index.js";
 
 router.post('/add-customer', addCustomerInfo)
 router.get('/get-customer', getCustomerInfo)
@@ -19,4 +20,5 @@ router.get('/get-business-info', getBusinessInfo)
 router.use('/product', product)
 router.use('/termConditions', TermsCondition)
 
+router.use('/setting',Settings)
 export default router

@@ -1,4 +1,7 @@
 import Quotation from '../models/QuotationSchema.js'
+import path from 'path'
+import * as fs from 'fs'
+const __dirname = path.resolve(path.dirname(''));
 
 export const getQuotationNumber = async (req, res) => {
     console.log("API : '/quotation/quotation-number")
@@ -16,7 +19,6 @@ export const getQuotationNumber = async (req, res) => {
         })
     }
 }
-
 export const addQuotation = async (req, res) => {
     console.log("API : '/quotation/add-quotation")
     try {
@@ -26,8 +28,14 @@ export const addQuotation = async (req, res) => {
         if (!quotation) {
             quotation = await Quotation.create({ quotationNo: quotationNo })
         }
-        await Quotation.findByIdAndUpdate(quotation._id, req.body, { new: true })
-        let quotations = await Quotation.find({})
+        await Quotation.findByIdAndUpdate(quotation._id,
+            { ...req.body, otherCharges: req.body.otherCharges === '' ? null : req.body.otherCharges},
+            { new: true })
+        let quotations = await Quotation.find()
+            .populate('customer') // Populates the customer field
+            .populate('purchaseProduct.productData') // Populates the product data in purchaseProduct
+            .populate('termsConditon'); // Populates the terms and conditions field
+
         res.status(200).json({
             message: "Quotation Added Successfully",
             data: quotations
@@ -39,17 +47,68 @@ export const addQuotation = async (req, res) => {
         })
     }
 }
+export const addQuotationDoc = async (req, res) => {
+    console.log("API : /quotation/add-quotation-doc");
+    try {
+        Quotation.uploadDoc(req, res, async (err) => {
+            if (err) {
+                console.log("MULTER ERROR", err);
+                return res.status(500).json({
+                    messgae: 'Internal Server Error'
+                })
+            }
+            console.log("body ", req.body)
+            console.log("FILE ", req.file)
+            const { quotationNo } = req.body
+            let quotation = await Quotation.findOne({ quotationNo: quotationNo })
+            if (req.file && quotation.Quotedocument !== '' && quotation.Quotedocument !== undefined) {
+                fs.unlinkSync(path.join(__dirname, quotation.Quotedocument))
+            }
+            if (req.file) {
+                quotation.Quotedocument = path.join(Quotation.docPath, req?.file?.filename)
+            }
+            console.log("QUOTATION IS ", quotation);
+            if (quotation.otherCharges === '') {
+                console.log("PASSING THROUGH HERE");
+                quotation.otherCharges = null
+            }
+            await quotation.save()
+            Quotation.findOne({ quotationNo: quotationNo })
+                .then(quotation => {
+                    console.log("Doc Updated ", quotation)
+                    return res.status(200).json({
+                        message: 'Doc Updated Successfully',
+                        data: quotation
+                    })
+                }).catch(err => {
+                    console.log("updating doc error", err)
+                })
+        })
+    } catch (error) {
+        console.log("ERROR IN Document Upload ", error);
+        return res.status(500).json({
+            messgae: 'Internal Server Error'
+        })
+    }
+}
 export const getQuotationInfo = async (req, res) => {
     console.log("API : '/quotation/get-quotation")
     try {
-        const quotation = await Quotation.find({});
+        const quotations = await Quotation.find()
+            .populate('customer') // Populates the customer field
+            .populate('purchaseProduct.productData') // Populates the product data in purchaseProduct
+            .populate('termsConditon'); // Populates the terms and conditions field
+
+        console.log('Quotations with details:', quotations);
         res.status(200).json({
-            message: "Quotation Data Added",
-            data: quotation
-        });
-    } catch (err) {
+            message: "Fetch Quotation Details Successfully",
+            data: quotations
+        })
+    } catch (error) {
+        console.error('Error fetching quotations:', error);
         res.status(500).json({
             message: "Internal Server Error"
         })
     }
-}
+};
+
