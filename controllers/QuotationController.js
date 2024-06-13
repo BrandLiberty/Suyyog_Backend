@@ -4,7 +4,7 @@ import * as fs from 'fs'
 const __dirname = path.resolve(path.dirname(''));
 
 export const getQuotationNumber = async (req, res) => {
-    console.log("API : '/quotation/quotation-number")
+    console.log("API : '/superadmin/quotation/quotation-number")
     try {
         const lastQuotation = await Quotation.findOne().sort({ quotationNo: -1 });
         const nextQuotationNumber = lastQuotation ? lastQuotation.quotationNo + 1 : 1;
@@ -20,7 +20,7 @@ export const getQuotationNumber = async (req, res) => {
     }
 }
 export const addQuotation = async (req, res) => {
-    console.log("API : '/quotation/add-quotation")
+    console.log("API : '/superadmin/quotation/add-quotation")
     try {
         console.log("REQ BODY ", req.body);
         const { quotationNo } = req.body
@@ -48,7 +48,7 @@ export const addQuotation = async (req, res) => {
     }
 }
 export const addQuotationDoc = async (req, res) => {
-    console.log("API : /quotation/add-quotation-doc");
+    console.log("API : /superadmin/quotation/add-quotation-doc");
     try {
         Quotation.uploadDoc(req, res, async (err) => {
             if (err) {
@@ -92,7 +92,7 @@ export const addQuotationDoc = async (req, res) => {
     }
 }
 export const getQuotationInfo = async (req, res) => {
-    console.log("API : '/quotation/get-quotation")
+    console.log("API : '/superadmin/quotation/get-quotation")
     try {
         const quotations = await Quotation.find()
             .populate('customer') // Populates the customer field
@@ -111,4 +111,28 @@ export const getQuotationInfo = async (req, res) => {
         })
     }
 };
-
+export const deleteQuotationInfo = async (req, res) => {
+    console.log("API : '/superadmin/quotation/delete-quotation")
+    try {
+        console.log("REQ BODY ", req.body);
+        const { id } = req.body
+        const quotation = await Quotation.findOne({ _id: id })
+        if (quotation) {
+            await Quotation.findByIdAndDelete(quotation._id, req.body, { new: true })
+        }
+       
+        let quotations = await Quotation.find()
+        .populate('customer') // Populates the customer field
+        .populate('purchaseProduct.productData') // Populates the product data in purchaseProduct
+        .populate('termsConditon'); // Populates the terms and conditions field
+        res.status(200).json({
+            message: "Quotation Deleted Successfully",
+            data: quotations
+        })
+    } catch (err) {
+        console.log("ERROr IN DELETED QUOTATION ", err);
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+}

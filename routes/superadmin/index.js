@@ -12,14 +12,14 @@ import { jwtSuperAdminAuth } from "../../middlewares/jwtAuthCheck.js";
 
 router.post("/create-session",createSession)
 
-router.post('/add-customer',jwtSuperAdminAuth, addCustomerInfo)
+router.post('/add-customer', addCustomerInfo)
 router.get('/get-customer', getCustomerInfo)
-router.post('/delete-customer',jwtSuperAdminAuth, deleteCustomerInfo)
+router.post('/delete-customer', deleteCustomerInfo)
 
-router.post('/add-business-info',jwtSuperAdminAuth, addBusinessInfo)
-router.post('/add-business-logo',jwtSuperAdminAuth, addBussinessLogo)
-router.post('/add-business-sign',jwtSuperAdminAuth, addBussinessSign)
-router.get('/get-business-info',jwtSuperAdminAuth, getBusinessInfo)
+router.post('/add-business-info', addBusinessInfo)
+router.post('/add-business-logo', addBussinessLogo)
+router.post('/add-business-sign', addBussinessSign)
+router.get('/get-business-info', getBusinessInfo)
 
 router.use('/product', product)
 
