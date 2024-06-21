@@ -6,6 +6,9 @@ export const createSession = async (req, res) => {
     console.log("API /superadmin/create-session");
     try {
         const { userName, password } = req.body
+        console.log('====================================');
+        console.log(req.body);
+        console.log('====================================');
         if (userName === process.env.ADMIN_ID && password === process.env.ADMIN_PASS) {
             let user = {userName,password,type:"superadmin"}
             let token = jwt.sign(user, 'Suyyog123New', { expiresIn: `9h` })
